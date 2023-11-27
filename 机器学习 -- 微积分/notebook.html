@@ -1,0 +1,693 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; --title-bar-height:20px; }
+.mac-os-11 { --title-bar-height:28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; padding-bottom: 0px !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex:2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.42857rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left: 28px solid transparent; border-right: 28px solid transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right: 8px solid transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+
+
+/* 全局属性 */
+#write {
+  max-width: 860px;
+  font-size: 1rem;
+  color: black;
+  padding: 0 10px;
+  line-height: 1.6;
+  word-spacing: 0px;
+  letter-spacing: 0px;
+  word-break: break-word;
+  word-wrap: break-word;
+  text-align: left;
+  font-family: Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, 'PingFang SC', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/*段落*/
+#write + p, 
+#write blockquote p {
+  font-size: 1rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  margin: 0;
+  line-height: 1.5rem;
+  color: black;
+}
+#write div[mdtype=toc] {
+  font-size: 1rem;
+}
+
+/*标题*/
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+  margin: 1.2em 0 1em;
+  padding: 0px;
+  font-weight: bold;
+  color: black;
+}
+#write h1 {
+  font-size: 1.5rem;
+}
+#write h2 {
+  font-size: 1.3rem;
+  border-bottom: 2px solid rgb(239, 112, 96);
+}
+#write h2 span {
+ display: inline-block;
+ font-weight: bold;
+ background: rgb(239, 112, 96);
+ color: #ffffff;
+ padding: 3px 10px 1px;
+ border-top-right-radius: 3px;
+ border-top-left-radius: 3px;
+ margin-right: 3px;
+}
+#write h2:after {
+ display: inline-block;
+ content: "";
+ vertical-align: bottom;
+ border-bottom: 1.25rem solid #efebe9;
+ border-right: 1.25rem solid transparent;
+}
+
+#write h3 {
+  font-size: 1.3rem;
+}
+#write h4 {
+  font-size: 1.2rem;
+}
+#write h5 {
+  font-size: 1.1rem;
+}
+#write h6 {
+  font-size: 1rem;
+}
+
+/*列表*/
+#write ul,
+#write ol {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding-left: 25px;
+  color: black;
+}
+#write ul {
+  list-style-type: disc;
+}
+#write ul ul {
+  list-style-type: square;
+}
+#write ol {
+  list-style-type: decimal;
+}
+#write li section {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  line-height: 1.7rem;
+  text-align: left;
+  color: rgb(1,1,1); /* 只要是纯黑色微信编辑器就会把color这个属性吞掉。。。*/
+  font-weight: 500;
+}
+
+/*引用*/
+#write blockquote {
+  display: block;
+  font-size: .9em;
+  overflow: auto;
+  border-left: 3px solid rgb(239, 112, 96);
+  color: #6a737d;
+  padding: 10px 10px 10px 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  background: #fff9f9;
+}
+
+/*链接*/
+#write a {
+  text-decoration: none;
+  word-wrap: break-word;
+  font-weight: bold;
+  border-bottom: 1px solid #1e6bb8;
+  color: rgb(239, 112, 96);
+  border-bottom: 1px solid rgb(239, 112, 96);
+}
+
+/*行内代码*/
+#write p code,
+#write li code {
+  font-size: .9rem;
+  word-wrap: break-word;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 0 2px;
+  color:  rgb(239, 112, 96);;
+  background-color: rgba(27,31,35,.05);
+  font-family: Operator Mono, Consolas, Monaco, Menlo, monospace;
+  word-break: break-all;
+}
+
+/*图片*/
+#write img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+#write span img {
+  display: inline-block;
+  border-right: 0px;
+  border-left: 0px;
+}
+
+/*表格*/
+#write table {
+  display: table;
+  text-align: left;
+}
+#write tbody {
+  border: 0;
+}
+#write table tr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  background-color: white;
+}
+#write table tr:nth-child(2n) {
+  background-color: #F8F8F8;
+}
+#write table tr th,
+#write table tr td {
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: left;
+}
+#write table tr th {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+/* 行内代码 */
+#write span code, #write li code {
+ color: rgb(239, 112, 96);
+}
+
+/* 脚注上标 */
+#write .md-footnote {
+ font-weight: bold;
+ color: rgb(239, 112, 96);
+}
+#write .md-footnote > .md-text:before {
+ content: '['
+}
+#write .md-footnote > .md-text:after {
+ content: ']'
+}
+
+/* 脚注 */
+#write .md-def-name {
+  padding-right: 1.8ch;
+}
+#write .md-def-name:before {
+  content: '[';
+  color: #000;
+}
+#write .md-def-name:after {
+  color: #000;
+}
+
+/* 代码块主题 */
+.md-fences:before {
+  content: ' ';
+  display: block;
+  width: 100%;
+  background-size: 40px;
+  background-repeat: no-repeat;
+  background-color: #282c34;
+  margin-bottom: -7px;
+  border-radius: 5px;
+  background-position: 10px 10px;
+}
+
+/* CodeMirror 相关内容 */
+.CodeMirror-wrap .CodeMirror-scroll {
+  overflow-x: auto;
+}
+.cm-s-inner.CodeMirror {
+  padding: .5rem;
+  background-color: #292d3e;
+  color: #a6accd;
+  font-family: Consolas;
+  border-radius: 4px;
+}
+.cm-s-inner .cm-keyword {
+  color: #c792ea !important;
+}
+.cm-s-inner .cm-operator {
+  color: #89ddff !important;
+}
+.cm-s-inner .cm-variable-2 {
+  color: #eeffff !important;
+}
+.cm-s-inner .cm-variable-3,
+.cm-s-inner .cm-type {
+  color: #f07178 !important;
+}
+.cm-s-inner .cm-builtin {
+  color: #ffcb6b !important;
+}
+.cm-s-inner .cm-atom {
+  color: #f78c6c !important;
+}
+.cm-s-inner .cm-number {
+  color: #ff5370 !important;
+}
+.cm-s-inner .cm-def {
+  color: #82aaff !important;
+}
+.cm-s-inner .cm-string {
+  color: #c3e88d !important;
+}
+.cm-s-inner .cm-string-2 {
+  color: #f07178 !important;
+}
+.cm-s-inner .cm-comment {
+  color: #676e95 !important;
+}
+.cm-s-inner .cm-variable {
+  color: #f07178 !important;
+}
+.cm-s-inner .cm-tag {
+  color: #ff5370 !important;
+}
+.cm-s-inner .cm-meta {
+  color: #ffcb6b !important;
+}
+.cm-s-inner .cm-attribute {
+  color: #c792ea !important;
+}
+.cm-s-inner .cm-property {
+  color: #c792ea !important;
+}
+.cm-s-inner .cm-qualifier {
+  color: #decb6b !important;
+}
+.cm-s-inner .cm-variable-3,
+.cm-s-inner .cm-type {
+  color: #decb6b !important;
+}
+.cm-s-inner .cm-error {
+  color: rgba(255, 255, 255, 1) !important;
+  background-color: #ff5370 !important;
+}
+.cm-s-inner .CodeMirror-matchingbracket {
+  text-decoration: underline;
+  color: white !important;
+}
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid rgb(239, 112, 96);
+  z-index: 3;
+}
+
+.cm-s-inner div.CodeMirror-selected {
+  background: rgba(167, 178, 189, 0.2) !important;
+}
+
+.cm-s-inner.CodeMirror-focused div.CodeMirror-selected {
+  background: rgba(167, 178, 189, 0.2) !important;
+}
+
+.cm-s-inner .CodeMirror-selected,
+.cm-s-inner .CodeMirror-selectedtext {
+  background-color: rgba(167, 178, 189, 0.0) !important;
+}
+
+.cm-s-inner .CodeMirror-line::-moz-selection,
+.cm-s-inner .CodeMirror-line > span::-moz-selection,
+.cm-s-inner .CodeMirror-line > span > span::-moz-selection {
+  background-color: rgba(167, 178, 189, 0.2);
+}
+
+.cm-s-inner .CodeMirror-line::selection,
+.cm-s-inner .CodeMirror-line > span::selection,
+.cm-s-inner .CodeMirror-line > span > span::selection {
+  background-color: rgba(167, 178, 189, 0.2);
+}
+
+
+
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+
+g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+
+.MathJax g[data-mml-node="xypic"] path {
+  stroke-width: inherit;
+}
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+							stroke-width: 0;
+						}
+</style><title>notebook</title>
+</head>
+<body class='typora-export os-windows typora-export-show-outline typora-export-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1 outline-item-open"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#week-1-derivatives-and-optimization">Week 1: Derivatives and Optimization</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11-导数的表示方法derivative-notation">1.1 导数的表示方法：Derivative notation</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#12-反函数inverse-function">1.2 反函数：Inverse Function</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#13-欧拉数e">1.3 欧拉数：e</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#14-导数的存在性existence-of-the-derivative">1.4 导数的存在性：Existence of the derivative</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#15-chain-rule">1.5 Chain Rule</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#16-平方损失优化">1.6 平方损失优化</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#17-对数损失优化">1.7 对数损失优化</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h1 outline-item-open"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#week-2-gradients-and-gradient-descent">Week 2: Gradients and Gradient Descent</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#21-partial-derivatives">2.1 Partial derivatives</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#22-gradient">2.2 Gradient</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#23-optimization-using-gradient-descent-in-one-variable">2.3 Optimization using Gradient Descent in one variable</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#24-optimization-using-gradient-descent-in-two-variables">2.4 Optimization using Gradient Descent in two variables</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#25-梯度下降法应用于线性回归">2.5 梯度下降法应用于线性回归</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h1 outline-item-open"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#week-3-optimization-in-neural-networks-and-newtowns-method">Week 3: Optimization in Neural Networks and Newtown's Method</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#31-感知机">3.1 感知机</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#311-分类问题">3.1.1 分类问题</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#312-分类问题">3.1.2 分类问题</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#32-神经网络">3.2 神经网络</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#33-牛顿方法newtons-method">3.3 牛顿方法：Newton's method</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#34-二阶导数">3.4 二阶导数</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#35-海森矩阵hessian-matrix">3.5 海森矩阵：Hessian Matrix</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#36-海森矩阵和凹凸性">3.6 海森矩阵和凹凸性</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2 outline-item-single"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#37-牛顿方法用于两个变量的函数">3.7 牛顿方法用于两个变量的函数</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><div style="font-size: 25px"><b>📕机器学习--微积分</b></div><p><span>[</span><a href='https://www.coursera.org/specializations/mathematics-for-machine-learning-and-data-science'><span>课程链接: Coursera</span></a><span>]</span>
+<span>[</span><a href='https://www.bilibili.com/video/BV1Pg4y1X7Pa?p=1'><span>课程链接: Bilibili</span></a><span>]</span>
+<span>[</span><a href='https://github.com/Ryota-Kawamura/Mathematics-for-Machine-Learning-and-Data-Science-Specialization'><span>课程链接: Github</span></a><span>] -- Homework</span></p><div class='md-toc' mdtype='toc'><p class="md-toc-content" role="list"><span role="listitem" class="md-toc-item md-toc-h1" data-ref="n488"><a class="md-toc-inner" href="#week-1-derivatives-and-optimization">Week 1: Derivatives and Optimization</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n489"><a class="md-toc-inner" href="#11-导数的表示方法derivative-notation">1.1 导数的表示方法：Derivative notation</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n493"><a class="md-toc-inner" href="#12-反函数inverse-function">1.2 反函数：Inverse Function</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n508"><a class="md-toc-inner" href="#13-欧拉数e">1.3 欧拉数：e</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n513"><a class="md-toc-inner" href="#14-导数的存在性existence-of-the-derivative">1.4 导数的存在性：Existence of the derivative</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n538"><a class="md-toc-inner" href="#15-chain-rule">1.5 Chain Rule</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n540"><a class="md-toc-inner" href="#16-平方损失优化">1.6 平方损失优化</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n552"><a class="md-toc-inner" href="#17-对数损失优化">1.7 对数损失优化</a></span><span role="listitem" class="md-toc-item md-toc-h1" data-ref="n574"><a class="md-toc-inner" href="#week-2-gradients-and-gradient-descent">Week 2: Gradients and Gradient Descent</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n575"><a class="md-toc-inner" href="#21-partial-derivatives">2.1 Partial derivatives</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n582"><a class="md-toc-inner" href="#22-gradient">2.2 Gradient</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n591"><a class="md-toc-inner" href="#23-optimization-using-gradient-descent-in-one-variable">2.3 Optimization using Gradient Descent in one variable</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n620"><a class="md-toc-inner" href="#24-optimization-using-gradient-descent-in-two-variables">2.4 Optimization using Gradient Descent in two variables</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n628"><a class="md-toc-inner" href="#25-梯度下降法应用于线性回归">2.5 梯度下降法应用于线性回归</a></span><span role="listitem" class="md-toc-item md-toc-h1" data-ref="n630"><a class="md-toc-inner" href="#week-3-optimization-in-neural-networks-and-newtowns-method">Week 3: Optimization in Neural Networks and Newtown's Method</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n631"><a class="md-toc-inner" href="#31-感知机">3.1 感知机</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n632"><a class="md-toc-inner" href="#311-分类问题">3.1.1 分类问题</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n645"><a class="md-toc-inner" href="#312-分类问题">3.1.2 分类问题</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n665"><a class="md-toc-inner" href="#32-神经网络">3.2 神经网络</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n671"><a class="md-toc-inner" href="#33-牛顿方法newtons-method">3.3 牛顿方法：Newton's method</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n679"><a class="md-toc-inner" href="#34-二阶导数">3.4 二阶导数</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n722"><a class="md-toc-inner" href="#35-海森矩阵hessian-matrix">3.5 海森矩阵：Hessian Matrix</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n715"><a class="md-toc-inner" href="#36-海森矩阵和凹凸性">3.6 海森矩阵和凹凸性</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n708"><a class="md-toc-inner" href="#37-牛顿方法用于两个变量的函数">3.7 牛顿方法用于两个变量的函数</a></span></p></div><h1 id='week-1-derivatives-and-optimization'><span>Week 1: Derivatives and Optimization</span></h1><h2 id='11-导数的表示方法derivative-notation'><span>1.1 导数的表示方法：Derivative notation</span></h2><p><img src="img/image-20231126154821814.png" alt="image-20231126154821814" style="zoom:67%;" /></p><blockquote><p><span>上述分别是</span><strong><span>拉格朗日表示法</span></strong><span>和</span><strong><span>莱布尼茨表示法</span></strong></p></blockquote><h2 id='12-反函数inverse-function'><span>1.2 反函数：Inverse Function</span></h2><p><img src="img/image-20231126160550732.png" alt="image-20231126160550732" style="zoom:67%;" /></p><blockquote><p><span>反函数的性质：</span></p><p><span>如果f(x)和g(x)互为反函数：</span></p><ul><li><b style = "color: red; background-color: yellow"><span>性质1：g(f(x)) = x</span></b></li><li><b style = "color: red; background-color: yellow"><span>性质2：如果(a, b)在f(x)上，则(b, a)在g(x)上</span></b></li><li><b style = "color: red; background-color: yellow"><span>性质3：如果(a, b)在f(x)上，且f(x)在x = a处的导数为m，则g(x)在x = b处的导数为1/m</span></b></li></ul><p><span>例如：</span></p><div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n506" cid="n506" mdtype="math_block" data-math-tag-before="0" data-math-tag-after="0" data-math-labels="[]"><div class="md-rawblock-container md-math-container" tabindex="-1"><mjx-container class="MathJax" jax="SVG" display="true" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="22.478ex" height="2.565ex" role="img" focusable="false" viewBox="0 -883.9 9935.5 1133.9" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-5-TEX-I-1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path><path id="MJX-5-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJX-5-TEX-I-1D460" d="M131 289Q131 321 147 354T203 415T300 442Q362 442 390 415T419 355Q419 323 402 308T364 292Q351 292 340 300T328 326Q328 342 337 354T354 372T367 378Q368 378 368 379Q368 382 361 388T336 399T297 405Q249 405 227 379T204 326Q204 301 223 291T278 274T330 259Q396 230 396 163Q396 135 385 107T352 51T289 7T195 -10Q118 -10 86 19T53 87Q53 126 74 143T118 160Q133 160 146 151T160 120Q160 94 142 76T111 58Q109 57 108 57T107 55Q108 52 115 47T146 34T201 27Q237 27 263 38T301 66T318 97T323 122Q323 150 302 164T254 181T195 196T148 231Q131 256 131 289Z"></path><path id="MJX-5-TEX-I-1D45E" d="M33 157Q33 258 109 349T280 441Q340 441 372 389Q373 390 377 395T388 406T404 418Q438 442 450 442Q454 442 457 439T460 434Q460 425 391 149Q320 -135 320 -139Q320 -147 365 -148H390Q396 -156 396 -157T393 -175Q389 -188 383 -194H370Q339 -192 262 -192Q234 -192 211 -192T174 -192T157 -193Q143 -193 143 -185Q143 -182 145 -170Q149 -154 152 -151T172 -148Q220 -148 230 -141Q238 -136 258 -53T279 32Q279 33 272 29Q224 -10 172 -10Q117 -10 75 30T33 157ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path><path id="MJX-5-TEX-I-1D45F" d="M21 287Q22 290 23 295T28 317T38 348T53 381T73 411T99 433T132 442Q161 442 183 430T214 408T225 388Q227 382 228 382T236 389Q284 441 347 441H350Q398 441 422 400Q430 381 430 363Q430 333 417 315T391 292T366 288Q346 288 334 299T322 328Q322 376 378 392Q356 405 342 405Q286 405 239 331Q229 315 224 298T190 165Q156 25 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 114 189T154 366Q154 405 128 405Q107 405 92 377T68 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-5-TEX-I-1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path><path id="MJX-5-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-5-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mi"><use data-c="1D465" xlink:href="#MJX-5-TEX-I-1D465"></use></g><g data-mml-node="mn" transform="translate(605,413) scale(0.707)"><use data-c="32" xlink:href="#MJX-5-TEX-N-32"></use></g></g><g data-mml-node="mtext" transform="translate(1008.6,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">和</text></g><g data-mml-node="mi" transform="translate(1975.6,0)"><use data-c="1D460" xlink:href="#MJX-5-TEX-I-1D460"></use></g><g data-mml-node="mi" transform="translate(2444.6,0)"><use data-c="1D45E" xlink:href="#MJX-5-TEX-I-1D45E"></use></g><g data-mml-node="mi" transform="translate(2904.6,0)"><use data-c="1D45F" xlink:href="#MJX-5-TEX-I-1D45F"></use></g><g data-mml-node="mi" transform="translate(3355.6,0)"><use data-c="1D461" xlink:href="#MJX-5-TEX-I-1D461"></use></g><g data-mml-node="mo" transform="translate(3716.6,0)"><use data-c="28" xlink:href="#MJX-5-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(4105.6,0)"><use data-c="1D465" xlink:href="#MJX-5-TEX-I-1D465"></use></g><g data-mml-node="mo" transform="translate(4677.6,0)"><use data-c="29" xlink:href="#MJX-5-TEX-N-29"></use></g><g data-mml-node="mtext" transform="translate(5066.6,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">互</text></g><g data-mml-node="mtext" transform="translate(6042.1,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">为</text></g><g data-mml-node="mtext" transform="translate(7017.5,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">反</text></g><g data-mml-node="mtext" transform="translate(7993,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">函</text></g><g data-mml-node="mtext" transform="translate(8960,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">数</text></g></g></g></svg><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msup><mi>x</mi><mn>2</mn></msup><mtext>和</mtext><mi>s</mi><mi>q</mi><mi>r</mi><mi>t</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mtext>互</mtext><mtext>为</mtext><mtext>反</mtext><mtext>函</mtext><mtext>数</mtext></math></mjx-assistive-mml></mjx-container></div></div><div contenteditable="false" spellcheck="false" class="mathjax-block md-end-block md-math-block md-rawblock" id="mathjax-n507" cid="n507" mdtype="math_block" data-math-tag-before="0" data-math-tag-after="0" data-math-labels="[]"><div class="md-rawblock-container md-math-container" tabindex="-1"><mjx-container class="MathJax" jax="SVG" display="true" style="position: relative;"><svg xmlns="http://www.w3.org/2000/svg" width="20.447ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 9037.4 1000" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" style="vertical-align: -0.566ex;"><defs><path id="MJX-6-TEX-I-1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path><path id="MJX-6-TEX-I-1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path><path id="MJX-6-TEX-I-1D459" d="M117 59Q117 26 142 26Q179 26 205 131Q211 151 215 152Q217 153 225 153H229Q238 153 241 153T246 151T248 144Q247 138 245 128T234 90T214 43T183 6T137 -11Q101 -11 70 11T38 85Q38 97 39 102L104 360Q167 615 167 623Q167 626 166 628T162 632T157 634T149 635T141 636T132 637T122 637Q112 637 109 637T101 638T95 641T94 647Q94 649 96 661Q101 680 107 682T179 688Q194 689 213 690T243 693T254 694Q266 694 266 686Q266 675 193 386T118 83Q118 81 118 75T117 65V59Z"></path><path id="MJX-6-TEX-I-1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-6-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-6-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mi"><use data-c="1D452" xlink:href="#MJX-6-TEX-I-1D452"></use></g><g data-mml-node="mi" transform="translate(499,413) scale(0.707)"><use data-c="1D465" xlink:href="#MJX-6-TEX-I-1D465"></use></g></g><g data-mml-node="mtext" transform="translate(953.5,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">和</text></g><g data-mml-node="mi" transform="translate(1920.5,0)"><use data-c="1D459" xlink:href="#MJX-6-TEX-I-1D459"></use></g><g data-mml-node="mi" transform="translate(2218.5,0)"><use data-c="1D45B" xlink:href="#MJX-6-TEX-I-1D45B"></use></g><g data-mml-node="mo" transform="translate(2818.5,0)"><use data-c="28" xlink:href="#MJX-6-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(3207.5,0)"><use data-c="1D465" xlink:href="#MJX-6-TEX-I-1D465"></use></g><g data-mml-node="mo" transform="translate(3779.5,0)"><use data-c="29" xlink:href="#MJX-6-TEX-N-29"></use></g><g data-mml-node="mtext" transform="translate(4168.5,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">互</text></g><g data-mml-node="mtext" transform="translate(5144,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">为</text></g><g data-mml-node="mtext" transform="translate(6119.4,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">反</text></g><g data-mml-node="mtext" transform="translate(7094.9,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">函</text></g><g data-mml-node="mtext" transform="translate(8061.9,0)"><text data-variant="normal" transform="scale(1,-1)" font-size="966.9px" font-family="serif">数</text></g></g></g></svg><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msup><mi>e</mi><mi>x</mi></msup><mtext>和</mtext><mi>l</mi><mi>n</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mtext>互</mtext><mtext>为</mtext><mtext>反</mtext><mtext>函</mtext><mtext>数</mtext></math></mjx-assistive-mml></mjx-container></div></div></blockquote><h2 id='13-欧拉数e'><span>1.3 欧拉数：e</span></h2><p><img src="img/image-20231126174413636.png" alt="image-20231126174413636" style="zoom:67%;" /></p><blockquote><p><span>👩银行存款中的应用：</span></p><p><img src="img/image-20231126174512360.png" alt="image-20231126174512360" style="zoom:67%;" /></p></blockquote><h2 id='14-导数的存在性existence-of-the-derivative'><span>1.4 导数的存在性：Existence of the derivative</span></h2><p><strong><span>For a function to be differentiable (可微) at a point:</span></strong></p><ul><li><span>The derivative has to exist for that point</span></li></ul><p><strong><span>For a function to be differentiable (可微) at an interval:</span></strong></p><ul><li><span>The derivative has to exist for </span><em><span>every</span></em><span> point in the interval</span></li></ul><blockquote><ol start='' ><li><b style = "color: green"><span>Generally, when a fuction has a corner (角) or a cusp (尖), the function is not differentiable at that point.</span></b></li></ol><p><img src="img/image-20231126181044435.png" alt="image-20231126181044435" style="zoom:67%;" /></p><ol start='2' ><li><b style = "color: green"><span>不连续的函数是不可微的</span></b></li></ol><p><img src="img/image-20231126181340331.png" alt="image-20231126181340331" style="zoom:67%;" /></p><ol start='3' ><li><b style = "color: green"><span>切线和y轴平行的函数也是不可微的</span></b></li></ol><p><img src="img/image-20231126181752416.png" alt="image-20231126181752416" style="zoom:67%;" /></p><p><a href='https://www.zhihu.com/question/317987526'><span>关于切线的一个知乎回答</span></a><span>：切线可以看做一小段曲线的近似</span></p></blockquote><p>⭐️<span>总结：有尖点，不连续，有垂直切线的函数不可微</span></p><p><img src="img/image-20231126182502756.png" alt="image-20231126182502756" style="zoom:67%;" /></p><h2 id='15-chain-rule'><span>1.5 Chain Rule</span></h2><p><img src="img/image-20231126200116285.png" alt="image-20231126200116285" style="zoom:67%;" /></p><h2 id='16-平方损失优化'><span>1.6 平方损失优化</span></h2><ul><li><span>Question：已知有三个电塔，距离原点的距离分别是a, b, c，现有一个房子需要确定选址，要求铺设电缆花费最少，其中：铺设电缆的费用与房子与电塔距离的平方成正比</span></li></ul><p><img src="img/image-20231126202048506.png" alt="image-20231126202048506" style="zoom:67%;" /></p><ul><li><span>Solution：</span></li></ul><p><img src="img/image-20231126202526094.png" alt="image-20231126202526094" style="zoom:67%;" /></p><blockquote><p><span>平方损失：</span></p><p><img src="img/image-20231126202627592.png" alt="image-20231126202627592" style="zoom:67%;" /></p></blockquote><h2 id='17-对数损失优化'><span>1.7 对数损失优化</span></h2><ul><li><span>Question：投10次硬币，7次正面，3次反面则游戏胜利。要求设计一枚特殊的硬币，其正面向上的概率为p，使得游戏获胜的概率最大</span></li></ul><p><img src="img/image-20231126211816037.png" alt="image-20231126211816037" style="zoom:67%;" /></p><ul><li><span>Solution 1：</span></li></ul><p><img src="img/image-20231126211855788.png" alt="image-20231126211855788" style="zoom:67%;" /></p><ul><li><span>Solution 2：另一种更简便的方式是对g(p)取对数，最大化g(p)相当于最大化log(g(p))</span></li></ul><p><img src="img/image-20231126212118516.png" alt="image-20231126212118516" style="zoom:67%;" /></p><blockquote><p><span>总结：</span><b style="color: blue"><span>为什么要取对数？</span></b></p><ol start='' ><li><span>Derivative of products is hard, derivative of sums is easy. (一堆式子相乘的导数很难求，但一堆式子相加的导数相对容易)</span></li></ol><p><img src="img/image-20231126212846966.png" alt="image-20231126212846966" style="zoom:50%;" /></p><ol start='2' ><li><span>Product of lots of tiny things is tiny! (一堆很小的数字相乘会导致很小的结果，计算机可能无法处理，将一个很小的数取对数就可能将这个数变成很大的一个负数)</span></li></ol></blockquote><h1 id='week-2-gradients-and-gradient-descent'><span>Week 2: Gradients and Gradient Descent</span></h1><h2 id='21-partial-derivatives'><span>2.1 Partial derivatives</span></h2><p><img src="img/image-20231127163912805.png" alt="image-20231127163912805" style="zoom:67%;" /></p><ul><li><span>求对x的偏导数，就是将y视为常数（用垂直于y轴的平面切割曲面），求f对x的一元导数，对应右图抛物线的导数</span></li><li><span>求对y的偏导数，就是将x视为常数（用垂直于x轴的平面切割曲面），求f对y的一元导数，对应左图抛物线的导数</span></li></ul><h2 id='22-gradient'><span>2.2 Gradient</span></h2><p><img src="img/image-20231127164653103.png" alt="image-20231127164653103" style="zoom:67%;" /></p><ul><li><span>一元函数的切线，对应二元函数的切平面，如上图，二元函数在某一点处的两个切线（偏导数）构成了切平面</span></li><li><b style = "color: red"><span>梯度就是由偏导数构成的向量▽</span></b><span>，英文为Nabla，“奈不拉”</span></li><li><b style = "color: blue"><span>梯度的方向是函数值增长最快的方向</span></b></li></ul><h2 id='23-optimization-using-gradient-descent-in-one-variable'><span>2.3 Optimization using Gradient Descent in one variable</span></h2><p><img src="img/image-20231127170352783.png" alt="image-20231127170352783" style="zoom:67%;" /></p><ul><li><span>对于上图中的cost function，直接使用导函数=0求最小值无法实现，此时我们可以使用梯度下降法</span></li></ul><p><img src="img/image-20231127170702422.png" alt="image-20231127170702422" style="zoom:67%;" /></p><ul><li><span>如上图，左边的点应该向右行走才能使函数值降低，右边的点应该向左走才能使函数值降低</span></li><li><span>左边点处的斜率为负数（应该向正方向行走，即：x增加），右边点处的斜率为正数（应该向负方向行走，即：x减少）</span></li><li><span>因此</span><strong><span>点的移动方向（x增加/减少）应该与斜率的方向相反</span></strong><span>，点移动的距离就等于该点处导数的值</span></li><li><span>也就是说，越陡峭的地方移动的距离越大，越平坦的地方移动的距离越小</span></li><li><span>我们不希望在陡峭的地方一次移动的距离过大，从而错过了最低点，因此，我们引入了学习率进行步长的调整</span></li></ul><p><img src="img/image-20231127172511973.png" alt="image-20231127172511973" style="zoom:67%;" /></p><ul><li><span>但是，学习率太小也不行，这会影响模型收敛的速度</span></li></ul><p><img src="img/image-20231127172738006.png" alt="image-20231127172738006" style="zoom:67%;" /></p><blockquote><p><span>👨‍🏫对于只有一个变量的梯度下降法：</span></p><p><img src="img/image-20231127172608543.png" alt="image-20231127172608543" style="zoom:67%;" /></p><ul><li><span>初始位置的选取很重要，单一的初始位置可能会使得梯度下降算法陷入</span><strong><span>局部最小值（local minima）</span></strong></li></ul><p><img src="img/image-20231127172902281.png" alt="image-20231127172902281" style="zoom:67%;" /></p></blockquote><h2 id='24-optimization-using-gradient-descent-in-two-variables'><span>2.4 Optimization using Gradient Descent in two variables</span></h2><p><img src="img/image-20231127173042513.png" alt="image-20231127173042513" style="zoom:67%;" /></p><ul><li><span>沿着梯度的反方向行走~</span></li></ul><blockquote><p><span>🕵️‍♂️对于含有两个变量的梯度下降法：</span></p><p><img src="img/image-20231127173224822.png" alt="image-20231127173224822" style="zoom:67%;" /></p></blockquote><h2 id='25-梯度下降法应用于线性回归'><span>2.5 梯度下降法应用于线性回归</span></h2><p><img src="img/image-20231127173427876.png" alt="image-20231127173427876" style="zoom:67%;" /></p><h1 id='week-3-optimization-in-neural-networks-and-newtowns-method'><span>Week 3: Optimization in Neural Networks and Newtown&#39;s Method</span></h1><h2 id='31-感知机'><span>3.1 感知机</span></h2><h3 id='311-分类问题'><span>3.1.1 分类问题</span></h3><ul><li><span>多元线性回归问题（损失使用平方损失）：</span></li></ul><p><img src="img/image-20231127212231278.png" alt="image-20231127212231278" style="zoom:67%;" /></p><ul><li><span>反向传播计算梯度：</span></li></ul><p><img src="img/image-20231127212427356.png" alt="image-20231127212427356" style="zoom:67%;" /></p><ul><li><span>计算结果：</span></li></ul><p><img src="img/image-20231127212706265.png" alt="image-20231127212706265" style="zoom:67%;" /></p><h3 id='312-分类问题'><span>3.1.2 分类问题</span></h3><ul><li><span>二分类问题（激活函数使用sigmoid，损失使用对数损失）：</span></li></ul><p><img src="img/image-20231127212906723.png" alt="image-20231127212906723" style="zoom:67%;" /></p><ul><li><p><span>关于sigmoid函数：</span></p><ul><li><span>函数图像：</span><img src="img/image-20231127213000910.png" alt="image-20231127213000910" style="zoom:50%;" /></li><li><span>导函数：</span><img src="img/image-20231127213100630.png" alt="image-20231127213100630" style="zoom: 67%;" /></li></ul></li><li><p><span>关于对数损失：</span></p></li></ul><p><img src="img/image-20231127213239480.png" alt="image-20231127213239480" style="zoom:67%;" /></p><ul><li><span>反向传播计算结果：</span></li></ul><p><img src="img/image-20231127213522744.png" alt="image-20231127213522744" style="zoom:67%;" /></p><h2 id='32-神经网络'><span>3.2 神经网络</span></h2><p><img src="img/image-20231127213810242.png" alt="image-20231127213810242" style="zoom:67%;" /></p><ul><li><span>反向传播：</span></li></ul><p><img src="img/image-20231127214040237.png" alt="image-20231127214040237" style="zoom:67%;" /></p><h2 id='33-牛顿方法newtons-method'><span>3.3 牛顿方法：Newton&#39;s method</span></h2><p><b style = "color: red; background-color: yellow"><span>牛顿方法原本是用来找函数零点的！！！</span></b></p><p><img src="img/image-20231127214414327.png" alt="image-20231127214414327" style="zoom:80%;" /></p><ul><li><span>牛顿方法用于优化：</span></li></ul><p><img src="img/image-20231127214521454.png" alt="image-20231127214521454" style="zoom:67%;" /></p><blockquote><p><span>找到函数g(x)的最小值点，相当于找g&#39;(x)的零点，这样以来就把优化问题转换成了找零点问题，牛顿方法便可派上用场！</span></p></blockquote><h2 id='34-二阶导数'><span>3.4 二阶导数</span></h2><ul><li><span>表示方法（一元函数）：</span></li></ul><p><img src="img/image-20231127214839477.png" alt="image-20231127214839477" style="zoom:67%;" /></p><ul><li><span>表示方法（二元函数）：</span></li></ul><p><img src="img/image-20231127215803446.png" alt="image-20231127215803446" style="zoom:67%;" /></p><ul><li><span>👼含义：二阶导数可以用于衡量</span><strong><span>曲线和直线的偏离量，即：曲率</span></strong></li></ul><p><img src="img/image-20231127215028798.png" alt="image-20231127215028798" style="zoom:67%;" /></p><ul><li><strong><span>二阶导数&gt;0为凹函数，二阶导数&lt;0为凸函数</span></strong></li></ul><p><img src="img/image-20231127215240295.png" alt="image-20231127215240295" style="zoom:67%;" /></p><blockquote><p><span>当我们找到了一些使得一阶导数等于0的点，我们并不能确定这些点是局部最大值还是局部最小值，这时候我们可以计算该点处的二阶导数，如果二阶导数大于0，则为局部最小值点，反之为局部最大值点！</span></p><ul><li><span>一阶导数反映单调性，二阶导数反映凹凸性</span></li></ul><p><img src="img/image-20231127215533098.png" alt="image-20231127215533098" style="zoom: 67%;" /></p></blockquote><h2 id='35-海森矩阵hessian-matrix'><span>3.5 海森矩阵：Hessian Matrix</span></h2><p><img src="img/image-20231127215957147.png" alt="image-20231127215957147" style="zoom:67%;" /></p><blockquote><p><span>一元函数和二元函数对比：</span></p><p><img src="img/image-20231127220102139.png" alt="image-20231127220102139" style="zoom:67%;" /></p></blockquote><h2 id='36-海森矩阵和凹凸性'><span>3.6 海森矩阵和凹凸性</span></h2><p><img src="img/image-20231127220231560.png" alt="image-20231127220231560" style="zoom:67%;" /></p><h2 id='37-牛顿方法用于两个变量的函数'><span>3.7 牛顿方法用于两个变量的函数</span></h2><p><img src="img/image-20231127220604368.png" alt="image-20231127220604368" style="zoom:67%;" /></p><blockquote><p><span>注意：Hessian矩阵和梯度向量的乘积顺序，海森矩阵形状为2x2，梯度向量形状为2x1</span></p></blockquote></div></div>
+
+<script>(function(){var e=document.body.parentElement,t=[],n=null,i=document.body.classList.contains("typora-export-collapse-outline"),r=function(e,t,n){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var i=e.target;i&&i!=this;i=i.parentNode)if(i.matches(t)){!1===n.call(i,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)};function o(){return e.scrollTop}r("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),d(),!1}),r("click",".outline-item",function(e){var t=this.querySelector(".outline-label");if(location.hash="#"+t.getAttribute("href"),i){var n=this.closest(".outline-item-wrapper").classList;n.contains("outline-item-open")||n.add("outline-item-open"),c(),n.add("outline-item-active")}});var a,s,l=function(){var e=o();n=null;for(var i=0;i<t.length&&t[i][1]-e<60;i++)n=t[i]},c=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},d=function(){if(n){c();var e=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(n[0]):n[0])+'"]');if(e)if(i){var t=e.closest(".outline-item-open>ul>.outline-item-wrapper");if(t)t.classList.add("outline-item-active");else{for(var r=(e=e.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");r;)r=(e=r).parentElement.closest(".outline-item-wrapper");e.classList.add("outline-item-active")}}else e.closest(".outline-item-wrapper").classList.add("outline-item-active")}};window.addEventListener("scroll",function(e){a&&clearTimeout(a),a=setTimeout(function(){l(),d()},300)});var u=function(){s=setTimeout(function(){!function(){t=[];var e=o();document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n=>{var i=n.getAttribute("id");t.push([i,e+n.getBoundingClientRect().y])})}(),l(),d()},300)};window.addEventListener("resize",function(e){s&&clearTimeout(s),u()}),u()})();</script></body>
+</html>
