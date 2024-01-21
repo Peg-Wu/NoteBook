@@ -8,8 +8,6 @@ import gc
 import torch.nn.functional as F
 import os
 
-batch_size = 128
-
 def convert_string_to_numbers(input_str):
     mapping = {'A': 0, 'G': 1, 'C': 2, 'U': 3}
     return [mapping[char] for char in input_str]
@@ -77,7 +75,12 @@ class PositionalEncoding(nn.Module):
         return self.dropout(X)
 
 def get_test(test_data_path=r'./data/2OM_Test/csv', integrate=True):
-    print('命名规则：A2OM_test.csv、C2OM_test.csv、...')
+    """
+    该函数用于得到测试数据集，dataloader一次性将所有的X和y加载出来
+    :param test_data_path: 测试数据集路径
+    :param integrate: 是否整合所有的测试数据集
+    :return: dataset和dataloader，如果integrate=False，则返回的dataset和dataloader为列表，分别对应AGCU的dataset和dataloader
+    """
     A = pd.read_csv(os.path.join(test_data_path, 'A2OM_test.csv'))
     G = pd.read_csv(os.path.join(test_data_path, 'G2OM_test.csv'))
     C = pd.read_csv(os.path.join(test_data_path, 'C2OM_test.csv'))
@@ -88,20 +91,22 @@ def get_test(test_data_path=r'./data/2OM_Test/csv', integrate=True):
         dataloader = get_dataloader(dataset, train=False, batch_size=len(dataset))
         return dataset, dataloader
     else:
-        # TODO: 分别构建AGCU的dataset和dataloader
-        pass
+        dataset = [get_dataset(convert_sequences_to_numbers(each.seq.values), each.label.values) for each in [A, G, C, U]]
+        dataloader = [get_dataloader(each, train=False, batch_size=len(each)) for each in dataset]
+        return dataset, dataloader
 
 def main(A_path='./data/2OM_Train/csv/A2OM_train.csv',
          G_path='./data/2OM_Train/csv/G2OM_train.csv',
          C_path='./data/2OM_Train/csv/C2OM_train.csv',
-         U_path='./data/2OM_Train/csv/U2OM_train.csv', ratio=0.5):
+         U_path='./data/2OM_Train/csv/U2OM_train.csv', ratio=0.5, moe_for_train=0.7):
     """
     主程序：从csv文件构建用于训练expert和moe的dataset和dataloader
     :param A_path: A甲基化csv文件路径
     :param G_path: G甲基化csv文件路径
     :param C_path: C甲基化csv文件路径
     :param U_path: U甲基化csv文件路径
-    :param ratio: 每个dataset切分的比例
+    :param ratio: 每个dataset切分给expert的比例
+    :param moe_for_train: 对moe的dataset进行切分，训练集的比例
     :return: dataset & dataloader
     """
     # READ_FILES
@@ -144,9 +149,13 @@ def main(A_path='./data/2OM_Train/csv/A2OM_train.csv',
     # EXPERT_DATASET & MOE_DATASET
     expert_dataset = [A_dataset1, G_dataset1, C_dataset1, U_dataset1]
     moe_dataset = A_dataset2 + G_dataset2 + C_dataset2 + U_dataset2
+    moe_train_dataset, moe_valid_dataset = split_dataset(moe_dataset, ratio=moe_for_train)
+    moe_dataset = [moe_train_dataset, moe_valid_dataset]
 
     # EXPERT_DATALOADER & MOE_DATALOADER
-    moe_dataloader = get_dataloader(moe_dataset)
+    moe_train_dataloader = get_dataloader(moe_train_dataset)
+    moe_valid_dataloader = get_dataloader(moe_train_dataset, train=False)
+    moe_dataloader = [moe_train_dataloader, moe_valid_dataloader]
     expert_dataloader = [get_dataloader(each) for each in expert_dataset]
 
     return expert_dataset, expert_dataloader, moe_dataset, moe_dataloader
@@ -157,5 +166,6 @@ if __name__ == '__main__':
         A_path='../data/2OM_Train/csv/A2OM_train.csv',
         G_path='../data/2OM_Train/csv/G2OM_train.csv',
         C_path='../data/2OM_Train/csv/C2OM_train.csv',
-        U_path='../data/2OM_Train/csv/U2OM_train.csv'
+        U_path='../data/2OM_Train/csv/U2OM_train.csv',
+        ratio=0.8, moe_for_train=0.7
     )
