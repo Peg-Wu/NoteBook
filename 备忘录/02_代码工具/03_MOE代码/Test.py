@@ -24,17 +24,34 @@ MOE = model.MOE(trained_experts=expert_models).to(device)
 MOE.load_state_dict(torch.load(f"./model_param/MOE.pkl", map_location=device))
 
 # Test
-accumulator = ts.Accumulator(4)
-with torch.no_grad():
-    for X, y in dataloader:
-        X, y = X.to(device), y.to(device)
-        output = MOE(X)
-        accumulator.add(*ts.evaluate(output, y))
+def test(test_model, test_dataloader):
+    accumulator = ts.Accumulator(4)
+    with torch.no_grad():
+        for X, y in test_dataloader:
+            X, y = X.to(device), y.to(device)
+            output = test_model(X)
+            accumulator.add(*ts.evaluate(output, y))
+    metric = ts.Metrics(*accumulator.data)
+    print(f'Accuracy: {metric.accuracy()}')
+    print(f'Precision: {metric.precision()}')
+    print(f'F1: {metric.f1()}')
+    print(f'MCC: {metric.mcc()}')
+    print(f'Sn: {metric.sn()}')
+    print(f'Sp: {metric.sp()}')
+    print('--------------------------------------------------')
 
-metric = ts.Metrics(*accumulator.data)
-print(f'Accuracy: {metric.accuracy()}')
-print(f'Precision: {metric.precision()}')
-print(f'F1: {metric.f1()}')
-print(f'MCC: {metric.mcc()}')
-print(f'Sn: {metric.sn()}')
-print(f'Sp: {metric.sp()}')
+# Test_Expert_A
+print("Expert_A:")
+test(Expert_A, dataloader)
+# Test_Expert_G
+print("Expert_G:")
+test(Expert_G, dataloader)
+# Test_Expert_C
+print("Expert_C:")
+test(Expert_C, dataloader)
+# Test_Expert_U
+print("Expert_U:")
+test(Expert_U, dataloader)
+# Test_MOE
+print("MOE:")
+test(MOE, dataloader)
