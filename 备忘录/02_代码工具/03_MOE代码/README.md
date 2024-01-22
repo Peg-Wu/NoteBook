@@ -20,6 +20,16 @@
 - Model1: Expert模型基于**CNN-Transformer**
 
 ```python
+"""
+MOE:
+Accuracy: 0.8095628413088627
+Precision: 0.8114348538694696
+F1: 0.8089887638232424
+MCC: 0.6191368675842226
+Sn: 0.8065573766084385
+Sp: 0.8125683055669025
+"""
+
 import torch
 from torch import nn
 
@@ -95,12 +105,3 @@ class MOE(nn.Module):
         weights = weights.unsqueeze(1).expand_as(outputs)
         return torch.sum(outputs * weights, dim=2)
 ```
-
-> MOE:
-> Accuracy: 0.8095628413088627
-> Precision: 0.8114348538694696
-> F1: 0.8089887638232424
-> MCC: 0.6191368675842226
-> Sn: 0.8065573766084385
-> Sp: 0.8125683055669025
-
