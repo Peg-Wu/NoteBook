@@ -7,11 +7,13 @@ from torch.utils.data import random_split
 # Hyperparameters
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 seed = 520
-epochs = 1  # 专家模型的epochs，训练集loss在early_stop个epochs之后没有降低，则提前停止训练
-early_stop = 5  # 专家模型和MOE模型共用
-epochs_moe = 1  # MOE模型的epochs，验证集loss在early_stop个epochs之后没有降低，则提前停止训练
+epochs = 10  # 专家模型的epochs，训练集loss在early_stop个epochs之后没有降低，则提前停止训练
+early_stop = 5  # 专家模型early_stop
+epochs_moe = 150  # MOE模型的epochs，验证集loss在early_stop个epochs之后没有降低，则提前停止训练
+early_stop_moe = 10  # MOE模型early_stop
 lr = 0.001  # 专家模型的learning_rate
 decay = 0.1  # MOE模型的learning_rate是专家模型的decay倍
+ratio = 0.7  # 训练集比例
 save_a = "./model_param/A.pkl"  # Expert_A模型保存路径
 save_g = "./model_param/G.pkl"  # Expert_G模型保存路径
 save_c = "./model_param/C.pkl"  # Expert_C模型保存路径
@@ -22,7 +24,7 @@ save_moe = "./model_param/MOE.pkl"  # MOE模型保存路径
 ts.same_seed(seed)
 
 # Get Dataset & DataLoader || After Onehot-encoding & Positional-encoding
-expert_dataset, expert_dataloader, moe_dataset, moe_dataloader = data.main(ratio=0.8, moe_for_train=0.7)
+expert_dataset, expert_dataloader, moe_dataset, moe_dataloader = data.main(ratio=ratio)
 expert_dataset_A, expert_dataset_G, expert_dataset_C, expert_dataset_U = expert_dataset
 expert_dataloader_A, expert_dataloader_G, expert_dataloader_C, expert_dataloader_U = expert_dataloader
 moe_dataset_train, moe_dataset_valid = moe_dataset
@@ -84,5 +86,5 @@ MOE_Optim = torch.optim.Adam(params=MOE.parameters(), lr=lr * decay)
 # Train MOE
 print(f"Train MOE Model:")
 ts.train_for_moe(MOE, save_moe, epochs_moe,
-                 moe_dataloader_train, moe_dataloader_valid, criterion, MOE_Optim, device, early_stop)
+                 moe_dataloader_train, moe_dataloader_valid, criterion, MOE_Optim, device, early_stop_moe)
 print('--------------------------------------------------')

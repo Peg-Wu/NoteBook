@@ -4,7 +4,6 @@ import torch
 from torch import nn
 from torch.utils.data import Dataset, DataLoader
 from torch.utils.data import random_split
-import gc
 import torch.nn.functional as F
 import os
 
@@ -98,7 +97,7 @@ def get_test(test_data_path=r'./data/2OM_Test/csv', integrate=True):
 def main(A_path='./data/2OM_Train/csv/A2OM_train.csv',
          G_path='./data/2OM_Train/csv/G2OM_train.csv',
          C_path='./data/2OM_Train/csv/C2OM_train.csv',
-         U_path='./data/2OM_Train/csv/U2OM_train.csv', ratio=0.5, moe_for_train=0.7):
+         U_path='./data/2OM_Train/csv/U2OM_train.csv', ratio=0.7):
     """
     主程序：从csv文件构建用于训练expert和moe的dataset和dataloader
     :param A_path: A甲基化csv文件路径
@@ -116,10 +115,6 @@ def main(A_path='./data/2OM_Train/csv/A2OM_train.csv',
     A_seq, G_seq, C_seq, U_seq = A.seq.values, G.seq.values, C.seq.values, U.seq.values
     A_label, G_label, C_label, U_label = A.label.values, G.label.values, C.label.values, U.label.values
 
-    # CLEAR
-    del A, G, C, U
-    gc.collect()
-
     # CONVERT SEQUENCE TO NUMBER
     A_seq = convert_sequences_to_numbers(A_seq)
     G_seq = convert_sequences_to_numbers(G_seq)
@@ -132,29 +127,22 @@ def main(A_path='./data/2OM_Train/csv/A2OM_train.csv',
     C_dataset = get_dataset(C_seq, C_label)
     U_dataset = get_dataset(U_seq, U_label)
 
-    # CLEAR
-    del A_seq, G_seq, C_seq, U_seq, A_label, G_label, C_label, U_label
-    gc.collect()
-
-    # SPLIT DATASET
+    # SPLIT DATASET, dataset2 for validation, dataset1 for every expert
     A_dataset1, A_dataset2 = split_dataset(A_dataset, ratio)
     G_dataset1, G_dataset2 = split_dataset(G_dataset, ratio)
     C_dataset1, C_dataset2 = split_dataset(C_dataset, ratio)
     U_dataset1, U_dataset2 = split_dataset(U_dataset, ratio)
-
-    # CLEAR
-    del A_dataset, G_dataset, C_dataset, U_dataset
-    gc.collect()
+    valid_dataset = A_dataset2 + G_dataset2 + C_dataset2 + U_dataset2  # moe 验证集
 
     # EXPERT_DATASET & MOE_DATASET
     expert_dataset = [A_dataset1, G_dataset1, C_dataset1, U_dataset1]
-    moe_dataset = A_dataset2 + G_dataset2 + C_dataset2 + U_dataset2
-    moe_train_dataset, moe_valid_dataset = split_dataset(moe_dataset, ratio=moe_for_train)
+    moe_train_dataset = A_dataset1 + G_dataset1 + C_dataset1 + U_dataset1
+    moe_valid_dataset = valid_dataset
     moe_dataset = [moe_train_dataset, moe_valid_dataset]
 
     # EXPERT_DATALOADER & MOE_DATALOADER
     moe_train_dataloader = get_dataloader(moe_train_dataset)
-    moe_valid_dataloader = get_dataloader(moe_train_dataset, train=False)
+    moe_valid_dataloader = get_dataloader(moe_valid_dataset, train=False)
     moe_dataloader = [moe_train_dataloader, moe_valid_dataloader]
     expert_dataloader = [get_dataloader(each) for each in expert_dataset]
 
@@ -167,5 +155,4 @@ if __name__ == '__main__':
         G_path='../data/2OM_Train/csv/G2OM_train.csv',
         C_path='../data/2OM_Train/csv/C2OM_train.csv',
         U_path='../data/2OM_Train/csv/U2OM_train.csv',
-        ratio=0.8, moe_for_train=0.7
-    )
+        ratio=0.7)

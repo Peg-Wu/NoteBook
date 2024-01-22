@@ -3,10 +3,17 @@ from utils import data, model
 from utils import train_script as ts
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+seed = 520
+
+# Seed
+ts.same_seed(520)
 
 # 因为测试数据的数据量不大，所以dataloader的batch_size设置成了len(dataset)，即一次load出所有的数据
 # 如果内存不够，需要修改，请进入./utils/data中修改get_test函数
 dataset, dataloader = data.get_test()
+
+# 数据量
+print(f"Data Number: ", len(dataset))
 
 # Expert_Model
 Expert_A = model.Expert().to(device)
@@ -26,6 +33,7 @@ MOE.load_state_dict(torch.load(f"./model_param/MOE.pkl", map_location=device))
 # Test
 def test(test_model, test_dataloader):
     accumulator = ts.Accumulator(4)
+    test_model.eval()
     with torch.no_grad():
         for X, y in test_dataloader:
             X, y = X.to(device), y.to(device)
