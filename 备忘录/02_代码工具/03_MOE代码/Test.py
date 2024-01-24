@@ -2,27 +2,32 @@ import torch
 from utils import data, model
 from utils import train_script as ts
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
 seed = 520
+batch_size = 128
+test_data_path = './data/2OM_Test/csv'
+Dataset_type = [data.Dataset_onehot]
+# Dataset_type = [data.Dataset_word2vec, 64]
+in_channels = 4  # 原始序列的特征维度
+pin_memory = True
 
 # Seed
 ts.same_seed(520)
 
-# 因为测试数据的数据量不大，所以dataloader的batch_size设置成了len(dataset)，即一次load出所有的数据
-# 如果内存不够，需要修改，请进入./utils/data中修改get_test函数
-dataset, dataloader = data.get_test()
+# Dataset & Dataloader
+dataset, dataloader = data.get_test_dataset_dataloader(test_data_path, batch_size, *Dataset_type, pin_memory=pin_memory)
 
 # 数据量
 print(f"Data Number: ", len(dataset))
 
 # Expert_Model
-Expert_A = model.Expert().to(device)
+Expert_A = model.Expert(in_channels).to(device)
 Expert_A.load_state_dict(torch.load(f"./model_param/A.pkl", map_location=device))
-Expert_G = model.Expert().to(device)
+Expert_G = model.Expert(in_channels).to(device)
 Expert_G.load_state_dict(torch.load(f"./model_param/G.pkl", map_location=device))
-Expert_C = model.Expert().to(device)
+Expert_C = model.Expert(in_channels).to(device)
 Expert_C.load_state_dict(torch.load(f"./model_param/C.pkl", map_location=device))
-Expert_U = model.Expert().to(device)
+Expert_U = model.Expert(in_channels).to(device)
 Expert_U.load_state_dict(torch.load(f"./model_param/U.pkl", map_location=device))
 expert_models = [Expert_A, Expert_G, Expert_C, Expert_U]
 

@@ -73,11 +73,11 @@ class Metrics:
     def f1(self):
         return (2 * self.TP) / (2 * self.TP + self.FP + self.FN + self.eps)
 
-def train_for_experts(model, model_save_path,
+def train_for_experts(model,
                       epochs,
                       dataloader_train,
                       loss_fn, optimizer,
-                      device, early_stop=5, dataloader_valid=None):
+                      device, early_stop):
     """该函数用于训练专家模型"""
     model = model.to(device)
     loss_fn = loss_fn.to(device)
@@ -100,8 +100,6 @@ def train_for_experts(model, model_save_path,
         # Early_Stop
         if epoch_loss <= best_loss:
             best_loss = epoch_loss
-            torch.save(model.state_dict(), model_save_path)
-            print(f'Saving model with loss {best_loss:.4f}')
             early_stop_count = 0
         else:
             early_stop_count += 1
@@ -110,14 +108,14 @@ def train_for_experts(model, model_save_path,
             print(f'Model is not improving in {early_stop} epochs, so we halt the training session.')
             break
 
-def train_for_moe(model, model_save_path,
+def train_for_moe(model, moe_save_path, a_save_path, g_save_path, c_save_path, u_save_path,
                   epochs,
                   dataloader_train, dataloader_valid,
-                  loss_fn, optimizer, device, early_stop=5):
+                  loss_fn, optimizer, device, early_stop):
     """该函数用于训练MOE模型"""
     model = model.to(device)
     loss_fn = loss_fn.to(device)
-    best_loss, early_stop_count = math.inf, 0
+    best_acc, early_stop_count = 0.0, 0
     writer = SummaryWriter(log_dir="./logs")
     accumulator = Accumulator(4)  # TP, TN, FP, FN
     for epoch in range(epochs):
@@ -187,10 +185,14 @@ def train_for_moe(model, model_save_path,
             writer.add_scalar("MOE_Valid_PRE", epoch_pre, epoch + 1)
 
         # Early_Stop (作用在验证集上)
-        if eval_epoch_loss <= best_loss:
-            best_loss = eval_epoch_loss
-            torch.save(model.state_dict(), model_save_path)
-            print(f'Saving model with loss {best_loss:.4f}')
+        if epoch_acc >= best_acc:
+            best_acc = epoch_acc
+            torch.save(model.state_dict(), moe_save_path)
+            torch.save(model.experts[0].state_dict(), a_save_path)
+            torch.save(model.experts[1].state_dict(), g_save_path)
+            torch.save(model.experts[2].state_dict(), c_save_path)
+            torch.save(model.experts[3].state_dict(), u_save_path)
+            print(f'Saving model with valid accuracy {best_acc:.4f}')
             early_stop_count = 0
         else:
             early_stop_count += 1
