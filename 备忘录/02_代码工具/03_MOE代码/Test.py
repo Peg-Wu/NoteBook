@@ -1,70 +1,74 @@
-import torch
-from utils import data, model
-from utils import train_script as ts
+import os
 
-device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
-seed = 520
-batch_size = 128
-test_data_path = './data/2OM_Test/csv'
-Dataset_type = [data.Dataset_onehot]
-# Dataset_type = [data.Dataset_word2vec, 64]
-in_channels = 4  # 原始序列的特征维度
-pin_memory = True
+import torch
+from tools import data, model, train_script as ts
+from torch.utils.data import DataLoader
+import sys
+import argparse
+
+# Hyper-parameters
+parser = argparse.ArgumentParser()
+parser.add_argument('--device', type=str, default='cuda:1')
+parser.add_argument('--seed', type=int, default=520)
+parser.add_argument('--data_root', type=str, default='./data')
+parser.add_argument('--h5_file', type=str, default='./embed.h5')
+parser.add_argument('--batch_size', type=int, default=32)
+parser.add_argument('--embed_type', default=['OneHotEmbedder'])
+"""
+--embed_type:
+'OneHotEmbedder','DNABert2Embedder','DNABertEmbedder/3mer','DNABertEmbedder/4mer','DNABertEmbedder/5mer',
+'DNABertEmbedder/6mer','NucleotideTransformerEmbedder','GENALMEmbedder/bigbird','GENALMEmbedder/bert','GROVEREmbedder'
+"""
+parser.add_argument('--save_moe', type=str, default='./model_param/moe/oh/moe.pkl')
+parser.add_argument('--test_logs', type=str, default='./test_logs/oh.txt')
+opt = parser.parse_args()
+
+# Device
+opt.device = torch.device(opt.device)
 
 # Seed
-ts.same_seed(520)
+ts.same_seed(opt.seed)
 
 # Dataset & Dataloader
-dataset, dataloader = data.get_test_dataset_dataloader(test_data_path, batch_size, *Dataset_type, pin_memory=pin_memory)
+dataset = data.merge_datasets(data.get_datasets(opt.data_root, opt.h5_file, opt.embed_type, bases='ACGU', train=False))
+dataloader = DataLoader(dataset, batch_size=opt.batch_size, shuffle=False)
 
-# 数据量
+# Number of Data
 print(f"Data Number: ", len(dataset))
+print('--------------------------------------------------------------------------------')
 
 # Expert_Model
-Expert_A = model.Expert(in_channels).to(device)
-Expert_A.load_state_dict(torch.load(f"./model_param/A.pkl", map_location=device))
-Expert_G = model.Expert(in_channels).to(device)
-Expert_G.load_state_dict(torch.load(f"./model_param/G.pkl", map_location=device))
-Expert_C = model.Expert(in_channels).to(device)
-Expert_C.load_state_dict(torch.load(f"./model_param/C.pkl", map_location=device))
-Expert_U = model.Expert(in_channels).to(device)
-Expert_U.load_state_dict(torch.load(f"./model_param/U.pkl", map_location=device))
-expert_models = [Expert_A, Expert_G, Expert_C, Expert_U]
+expert_a_model = model.Expert(embed_dims=data.calc_embed_dims(opt.embed_type))
+expert_c_model = model.Expert(embed_dims=data.calc_embed_dims(opt.embed_type))
+expert_g_model = model.Expert(embed_dims=data.calc_embed_dims(opt.embed_type))
+expert_u_model = model.Expert(embed_dims=data.calc_embed_dims(opt.embed_type))
+expert_models = [expert_a_model, expert_c_model, expert_g_model, expert_u_model]
 
 # MOE_Model
-MOE = model.MOE(trained_experts=expert_models).to(device)
-MOE.load_state_dict(torch.load(f"./model_param/MOE.pkl", map_location=device))
+moe_model = model.MOE(trained_experts=expert_models, embed_dims=data.calc_embed_dims(opt.embed_type))
+moe_model.load_state_dict(torch.load(opt.save_moe, map_location=opt.device))
 
-# Test
-def test(test_model, test_dataloader):
-    accumulator = ts.Accumulator(4)
-    test_model.eval()
-    with torch.no_grad():
-        for X, y in test_dataloader:
-            X, y = X.to(device), y.to(device)
-            output = test_model(X)
-            accumulator.add(*ts.evaluate(output, y))
-    metric = ts.Metrics(*accumulator.data)
-    print(f'Accuracy: {metric.accuracy()}')
-    print(f'Precision: {metric.precision()}')
-    print(f'F1: {metric.f1()}')
-    print(f'MCC: {metric.mcc()}')
-    print(f'Sn: {metric.sn()}')
-    print(f'Sp: {metric.sp()}')
-    print('--------------------------------------------------')
+# Logs
+os.makedirs(os.path.split(opt.test_logs)[0], exist_ok=True)
+sys.stdout = ts.Logger(opt.test_logs)
+sys.stderr = ts.Logger(opt.test_logs)
 
-# Test_Expert_A
-print("Expert_A:")
-test(Expert_A, dataloader)
-# Test_Expert_G
-print("Expert_G:")
-test(Expert_G, dataloader)
-# Test_Expert_C
-print("Expert_C:")
-test(Expert_C, dataloader)
-# Test_Expert_U
-print("Expert_U:")
-test(Expert_U, dataloader)
-# Test_MOE
+# Test Expert A
+print("Expert A:")
+ts.test(moe_model.experts[0], dataloader, opt.device)
+
+# Test Expert C
+print("Expert C:")
+ts.test(moe_model.experts[1], dataloader, opt.device)
+
+# Test Expert G
+print("Expert G:")
+ts.test(moe_model.experts[2], dataloader, opt.device)
+
+# Test Expert U
+print("Expert U:")
+ts.test(moe_model.experts[3], dataloader, opt.device)
+
+# Test MOE
 print("MOE:")
-test(MOE, dataloader)
+ts.test(moe_model, dataloader, opt.device)
