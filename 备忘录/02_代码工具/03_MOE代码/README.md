@@ -11,7 +11,7 @@
 
 ## 1. 数据集划分策略
 
-<img src="img/image-20240128191719121.png" alt="image-20240128191719121" style="zoom: 80%;" />
+<img src="img/image-20240128191719121.png" alt="image-20240128191719121" style="zoom: 67%;" />
 
 ## 2. 训练策略说明
 
@@ -43,31 +43,31 @@
 
 > 数据组织格式：
 
-data/
-├─2OM_Test/
-│  ├─csv/
-│  │      A2OM_test.csv
-│  │      C2OM_test.csv
-│  │      G2OM_test.csv
-│  │      U2OM_test.csv
-│  │
-│  └─fasta/
-│          A2OM_test.fasta
-│          C2OM_test.fasta
-│          G2OM_test.fasta
-│          U2OM_test.fasta
-│
-└─2OM_Train/
-    ├─csv/
-    │      A2OM_train.csv
-    │      C2OM_train.csv
-    │      G2OM_train.csv
-    │      U2OM_train.csv
-    │
-    └─fasta/
-            A2OM_train.fasta
-            C2OM_train.fasta
-            G2OM_train.fasta
+data/  
+├─2OM_Test/  
+│  ├─csv/  
+│  │      A2OM_test.csv  
+│  │      C2OM_test.csv  
+│  │      G2OM_test.csv  
+│  │      U2OM_test.csv  
+│  │  
+│  └─fasta/  
+│          A2OM_test.fasta  
+│          C2OM_test.fasta  
+│          G2OM_test.fasta  
+│          U2OM_test.fasta  
+│  
+└─2OM_Train/  
+    ├─csv/  
+    │      A2OM_train.csv  
+    │      C2OM_train.csv  
+    │      G2OM_train.csv  
+    │      U2OM_train.csv  
+    │  
+    └─fasta/  
+            A2OM_train.fasta  
+            C2OM_train.fasta  
+            G2OM_train.fasta  
             U2OM_train.fasta
 
 > 原始数据仅包含fasta文件，csv文件由`file_process.py`生成，命令如下：
