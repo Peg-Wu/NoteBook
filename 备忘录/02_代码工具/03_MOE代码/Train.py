@@ -103,15 +103,15 @@ ts.train(expert_a_model, opt.epochs, opt.early_stop, train_dataloader_a, valid_d
 print('----------------------------------------------------------------------------------------------------')
 
 print('Train Expert C:')
-ts.train(expert_c_model, opt.epochs, opt.early_stop, train_dataloader_c, valid_dataloader, criterion, expert_c_optim, opt.save_c, opt.a_logs, opt.device)
+ts.train(expert_c_model, opt.epochs, opt.early_stop, train_dataloader_c, valid_dataloader, criterion, expert_c_optim, opt.save_c, opt.c_logs, opt.device)
 print('----------------------------------------------------------------------------------------------------')
 
 print('Train Expert G:')
-ts.train(expert_g_model, opt.epochs, opt.early_stop, train_dataloader_g, valid_dataloader, criterion, expert_g_optim, opt.save_g, opt.a_logs, opt.device)
+ts.train(expert_g_model, opt.epochs, opt.early_stop, train_dataloader_g, valid_dataloader, criterion, expert_g_optim, opt.save_g, opt.g_logs, opt.device)
 print('----------------------------------------------------------------------------------------------------')
 
 print('Train Expert U')
-ts.train(expert_u_model, opt.epochs, opt.early_stop, train_dataloader_u, valid_dataloader, criterion, expert_u_optim, opt.save_u, opt.a_logs, opt.device)
+ts.train(expert_u_model, opt.epochs, opt.early_stop, train_dataloader_u, valid_dataloader, criterion, expert_u_optim, opt.save_u, opt.u_logs, opt.device)
 print('----------------------------------------------------------------------------------------------------')
 
 # Load the parameters of the trained expert models
