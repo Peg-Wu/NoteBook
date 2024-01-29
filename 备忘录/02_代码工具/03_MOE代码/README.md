@@ -127,3 +127,52 @@ tensorboard --logdir=...
 
 - 详情见`test_logs`文件夹！
 
+## 7. 当前效果最好的模型
+
+Expert基于CNN，模型如下：
+
+```python
+# 每次经过卷积块，形状会减半，通道数由给定参数决定
+def conv_block(num_convs, in_channels, out_channels):
+    layers = []
+    for _ in range(num_convs):
+        # 保持输入和输出的形状相同
+        layers.extend([nn.Conv1d(in_channels, out_channels, kernel_size=3, padding=1), nn.ReLU()])
+        in_channels = out_channels
+    # 通过Pooling层将形状减半
+    layers.extend([nn.MaxPool1d(kernel_size=2, stride=2)])
+    return nn.Sequential(*layers)
+
+def conv_net(conv_arch, in_channels):
+    conv_blks = []
+    for (num_convs, out_channels) in conv_arch:
+        conv_blks.append(conv_block(num_convs, in_channels, out_channels))
+        in_channels = out_channels
+    return nn.Sequential(*conv_blks)
+
+conv_arch = ((1, 128) for i in range(5))
+self.cnn = conv_net(conv_arch, embed_dims)
+self.dense = nn.Sequential(nn.Dropout(0.5), nn.Linear(128, 2))
+
+
+"""
+验证集：
+MOE:
+Accuracy: 0.8718
+Precision: 0.8648
+F1: 0.8722
+MCC: 0.7437
+Sn: 0.8797
+Sp: 0.8639
+
+测试集：
+MOE:
+Accuracy: 0.8661
+Precision: 0.8785
+F1: 0.8638
+MCC: 0.7326
+Sn: 0.8497
+Sp: 0.8825
+"""
+```
+
