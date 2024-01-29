@@ -8,19 +8,19 @@ import argparse
 
 # Hyper-parameters
 parser = argparse.ArgumentParser()
-parser.add_argument('--device', type=str, default='cuda:1')
+parser.add_argument('--device', type=str, default='cuda:0')
 parser.add_argument('--seed', type=int, default=520)
 parser.add_argument('--data_root', type=str, default='./data')
 parser.add_argument('--h5_file', type=str, default='./embed.h5')
 parser.add_argument('--batch_size', type=int, default=32)
-parser.add_argument('--embed_type', default=['OneHotEmbedder'])
+parser.add_argument('--embed_type', default=['DNABertEmbedder/3mer'])
 """
 --embed_type:
 'OneHotEmbedder','DNABert2Embedder','DNABertEmbedder/3mer','DNABertEmbedder/4mer','DNABertEmbedder/5mer',
 'DNABertEmbedder/6mer','NucleotideTransformerEmbedder','GENALMEmbedder/bigbird','GENALMEmbedder/bert','GROVEREmbedder'
 """
-parser.add_argument('--save_moe', type=str, default='./model_param/moe/oh/moe.pkl')
-parser.add_argument('--test_logs', type=str, default='./test_logs/oh.txt')
+parser.add_argument('--save_moe', type=str, default='./model_param/moe/db3/moe.pkl')
+parser.add_argument('--test_logs', type=str, default='./test_logs/odb3.txt')
 opt = parser.parse_args()
 
 # Device
@@ -29,8 +29,12 @@ opt.device = torch.device(opt.device)
 # Seed
 ts.same_seed(opt.seed)
 
-# Dataset & Dataloader
-dataset = data.merge_datasets(data.get_datasets(opt.data_root, opt.h5_file, opt.embed_type, bases='ACGU', train=False))
+# Dataset & Dataloader (Embedding)
+# dataset = data.merge_datasets(data.get_datasets(opt.data_root, opt.h5_file, opt.embed_type, bases='ACGU', train=False))
+# dataloader = DataLoader(dataset, batch_size=opt.batch_size, shuffle=False)
+
+# Dataset & Dataloader (Kmer Features)
+dataset = data.merge_datasets(data.get_datasets_kmer(opt.data_root, opt.h5_file, opt.embed_type, kmer=[1, 2, 3, 4], bases='ACGU', train=False))
 dataloader = DataLoader(dataset, batch_size=opt.batch_size, shuffle=False)
 
 # Number of Data

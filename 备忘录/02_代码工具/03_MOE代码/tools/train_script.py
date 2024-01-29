@@ -107,12 +107,13 @@ def train(model,
         epoch_loss = 0.0
         accumulator.reset()
         model.train()
-        for X, y in dataloader_train:
-            X, y = X.to(device), y.to(device)
+        for batch in dataloader_train:
+            for i in range(len(batch)):
+                batch[i] = batch[i].to(device)
             optimizer.zero_grad()
-            output = model(X)
-            accumulator.add(*evaluate(output, y))  # 计算TP、TN、FP、FN并累积
-            loss = loss_fn(output, y)
+            output = model(*batch[:-1])
+            accumulator.add(*evaluate(output, batch[-1]))  # 计算TP、TN、FP、FN并累积
+            loss = loss_fn(output, batch[-1])
             epoch_loss += loss.item()
             loss.backward()
             optimizer.step()
@@ -142,12 +143,13 @@ def train(model,
         accumulator.reset()
         model.eval()
         with torch.no_grad():
-            for X, y in dataloader_valid:
-                X, y = X.to(device), y.to(device)
-                output = model(X)
-                loss = loss_fn(output, y)
+            for batch in dataloader_valid:
+                for i in range(len(batch)):
+                    batch[i] = batch[i].to(device)
+                output = model(*batch[:-1])
+                loss = loss_fn(output, batch[-1])
                 epoch_loss += loss.item()
-                accumulator.add(*evaluate(output, y))  # 计算TP、TN、FP、FN并累积
+                accumulator.add(*evaluate(output, batch[-1]))  # 计算TP、TN、FP、FN并累积
 
             epoch_loss /= len(dataloader_valid)
             writer.add_scalar("Valid_Loss", epoch_loss, epoch + 1)
@@ -188,10 +190,11 @@ def test(model, dataloader, device):
     accumulator = Accumulator(4)
     model.eval()
     with torch.no_grad():
-        for X, y in dataloader:
-            X, y = X.to(device), y.to(device)
-            output = model(X)
-            accumulator.add(*evaluate(output, y))
+        for batch in dataloader:
+            for i in range(len(batch)):
+                batch[i] = batch[i].to(device)
+            output = model(*batch[:-1])
+            accumulator.add(*evaluate(output, batch[-1]))
     metric = Metrics(*accumulator.data)
     print(f'Accuracy: {metric.accuracy()}')
     print(f'Precision: {metric.precision()}')

@@ -1,8 +1,10 @@
+import numpy as np
 import pandas as pd
 import torch
-from torch.utils.data import TensorDataset, DataLoader
+from torch.utils.data import Dataset, TensorDataset, DataLoader
 from torch.utils.data import random_split
 from .h5 import Conductor
+from .seq_features import K_mer_features, fft_features
 import os
 import warnings
 warnings.filterwarnings("ignore")
@@ -102,6 +104,64 @@ def merge_datasets(datasets: list) -> torch.utils.data.Dataset:
         else:
             dataset += datasets[i]
     return dataset
+
+class Multi_mode_dataset(Dataset):
+    def __init__(self, X, X_features, y, train=True):
+        super(Multi_mode_dataset, self).__init__()
+        self.X = X
+        self.X_features = X_features
+        self.y = y
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.X_features[idx], self.y[idx]
+
+    def __len__(self):
+        return len(self.y)
+
+def get_datasets_kmer(data_root, h5_file, embed_type, kmer: [list[int]], bases: str, train=True) -> list:
+    """包含预训练模型编码的特征"""
+    for base in bases:
+        assert base in 'ACGU'
+
+    if train:
+        sub = '2OM_Train/csv'
+        sub2 = 'train'
+    else:
+        sub = '2OM_Test/csv'
+        sub2 = 'test'
+
+    csv_root = os.path.join(data_root, sub)
+    datasets = []
+    for base in bases:
+        data = pd.read_csv(os.path.join(csv_root, f'{base}2OM_{sub2}.csv'))
+        X_embedding = get_X_from_h5(h5_file, embed_type, base, train)[0]
+        X_features = torch.from_numpy(
+            np.concatenate([K_mer_features(data.seq.values.tolist(), k=i) for i in kmer], axis=-1)).float()
+        y = torch.from_numpy(data.label.values).long()
+        datasets.append(Multi_mode_dataset(X_embedding, X_features, y))
+    return datasets
+
+def get_datasets_fft(data_root, h5_file, embed_type, bases: str, train=True) -> list:
+    """包含预训练模型编码的特征"""
+    for base in bases:
+        assert base in 'ACGU'
+
+    if train:
+        sub = '2OM_Train/csv'
+        sub2 = 'train'
+    else:
+        sub = '2OM_Test/csv'
+        sub2 = 'test'
+
+    csv_root = os.path.join(data_root, sub)
+    datasets = []
+    for base in bases:
+        data = pd.read_csv(os.path.join(csv_root, f'{base}2OM_{sub2}.csv'))
+        X_embedding = get_X_from_h5(h5_file, embed_type, base, train)[0]
+        X_features = torch.from_numpy(fft_features(data.seq.values.tolist())).float()
+        y = torch.from_numpy(data.label.values).long()
+        datasets.append(Multi_mode_dataset(X_embedding, X_features, y))
+    return datasets
 
 def calc_embed_dims(embed_type: [str, list[str]]):
     assert isinstance(embed_type, (str, list))
