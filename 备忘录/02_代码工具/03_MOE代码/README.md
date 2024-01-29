@@ -127,9 +127,9 @@ tensorboard --logdir=...
 
 - 详情见`test_logs`文件夹！
 
-## 7. 当前效果最好的模型
+## 7. 当前效果最好的模型（BaseLine）
 
-Expert基于CNN，模型如下：
+Expert基于CNN，序列嵌入方式为DNABERT3，模型如下：
 
 ```python
 # 每次经过卷积块，形状会减半，通道数由给定参数决定
